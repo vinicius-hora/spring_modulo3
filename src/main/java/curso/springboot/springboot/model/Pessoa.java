@@ -24,6 +24,8 @@ public class Pessoa implements Serializable{
 	private String nome;
 	
 	private String sobrenome;
+	
+	private int idade;
 
 	public Long getId() {
 		return id;
@@ -72,6 +74,14 @@ public class Pessoa implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public int getIdade() {
+		return idade;
+	}
+
+	public void setIdade(int idade) {
+		this.idade = idade;
 	}
 	
 	
