@@ -1,0 +1,4 @@
+FROM postgres:14.0
+ENV POSTGRES_PASSWORD: admin 
+ENV POSTGRES_USER: postgres
+

@@ -1,0 +1,5 @@
+banco de dados:
+docker run -p 127.0.0.1:5433:5432 -t -e POSTGRES_PASSWORD=admin  -e POSTGRES_DB=springboot -d postgres
+entrar no container:
+docker exec -it ID bash
+psql -U postgres
