@@ -1,34 +1,22 @@
-banco de dados:
-docker run --name springbanco -p 5433:5433 -t -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=postgres -e POSTGRES_DB=springboot -d postgres
-entrar no container:
-docker exec -it springbanco bash
-psql -U postgres
-psql -d springboot -U postgres -W
+Referência:
+https://renatogroffe.medium.com/postgresql-docker-executando-uma-inst%C3%A2ncia-e-o-pgadmin-4-a-partir-de-containers-ad783e85b1a4
 
-\l
+comandos:
 
-\c springbboot
+1 - docker network create --driver bridge postgres-network
+2 - docker run --name teste-postgres --network=postgres-network -e "POSTGRES_PASSWORD=admin" -e "POSTGRES_HOST_AUTH_METHOD=trust" -p 5433:5432  -d postgres
+3 - docker run --name teste-pgadmin --network=postgres-network -p 5434:80 -e "PGADMIN_DEFAULT_EMAIL=admin@teste.com.br" -e "PGADMIN_DEFAULT_PASSWORD=admin" -d dpage/pgadmin4
 
-\q
 
-sudo firewall-cmd --permanet --zone=public --add-port=5432/tcp
-sudo firewall-cmd --reload
+acessar no navegador: http://localhost:5434/
+login: admin@teste.com.br
+senha: admin
 
-fenglc/pgadmin4
-docker pull fenglc/pgadmin4
-docker run --name pgadm -p 5050:5050 -d fenglc/pgadmin4
+configurar server:
+Host: teste-postgres
+porta: 5432
+criar banco: springboot
 
-localhost:5050/brower
-
-Use default administrator account to log in:
-
-user: pgadmin4@pgadmin.org
-password: admin
-
-ou ----------------------------------------------
-docker run --name postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=postgres -e POSTGRES_DB=springboot -d -p 5432:5432 postgres
-docker exec -it postgres bash
-psql -U postgres
-CREATE USER springuser PASSWORD 'admin';
-\q
-mvn spring-boot:run
+obs:
+O "POSTGRES_HOST_AUTH_METHOD=trust" foi definido, pois apresentava erro org.postgresql.util.PSQLException: O tipo de autenticação 10 não é suportado, sendo necessário configurar o arquivo pg_hba.conf,
+tentar a seguinte configuração depois: echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf dentro do container
