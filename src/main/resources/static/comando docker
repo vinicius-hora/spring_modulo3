@@ -1,5 +1,34 @@
 banco de dados:
-docker run -p 127.0.0.1:5433:5432 -t -e POSTGRES_PASSWORD=admin  -e POSTGRES_DB=springboot -d postgres
+docker run --name springbanco -p 5433:5433 -t -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=postgres -e POSTGRES_DB=springboot -d postgres
 entrar no container:
-docker exec -it ID bash
+docker exec -it springbanco bash
 psql -U postgres
+psql -d springboot -U postgres -W
+
+\l
+
+\c springbboot
+
+\q
+
+sudo firewall-cmd --permanet --zone=public --add-port=5432/tcp
+sudo firewall-cmd --reload
+
+fenglc/pgadmin4
+docker pull fenglc/pgadmin4
+docker run --name pgadm -p 5050:5050 -d fenglc/pgadmin4
+
+localhost:5050/brower
+
+Use default administrator account to log in:
+
+user: pgadmin4@pgadmin.org
+password: admin
+
+ou ----------------------------------------------
+docker run --name postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=postgres -e POSTGRES_DB=springboot -d -p 5432:5432 postgres
+docker exec -it postgres bash
+psql -U postgres
+CREATE USER springuser PASSWORD 'admin';
+\q
+mvn spring-boot:run
