@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<title>Cadastro de pessoas</title>
  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
  <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css"  media="screen,projection"/>
  <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css"  media="screen,projection"/>
@@ -21,7 +21,21 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		<input name="idade" th:field="*{idade}">
 		<input class="waves-effect waves-light btn" type="submit" value="Salvar">
 	</form>
+	<br> <br>
 	<a href="/listapessoas">Listar pessoas</a>
+	<br> <br>
+	<br> <br>
+	
+	<form action="pesquisarpessoa" method="post">
+		<label>Pesquisa por nome: </label>
+		<input name="nomepesquisa">
+		<input class="waves-effect waves-light btn" type="submit" value="Buscar">
+	
+	</form>
+	
+	
+	<br> <br>
+	<br> <br>
 	<table>
 		<tr th:each = "pessoa : ${pessoas}" >
 			<td th:text = "${pessoa.id}"> </td>
@@ -29,6 +43,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			<td th:text = "${pessoa.sobrenome}"> </td>
 			<td th:text = "${pessoa.idade}"> </td>
 			<td> <a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a> </td>
+			<td> <a th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">excluir</a> </td>
 		</tr>
 	</table>
 	<script type="text/javascript" src="/materialize/js/materialize.js"></script>
