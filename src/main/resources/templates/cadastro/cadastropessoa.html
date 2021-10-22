@@ -18,6 +18,12 @@
 	<h3>Spring Boot + Thymeleaf + marealize Design</h3>
 	<h5>Cadastro de Pessoas</h5>
 	<div class="row">
+	<br/>
+	    <div th:each = "m : ${msg}">
+	        <span th:text = "${m}"></span>
+	    </div>
+	<br/>
+
 		<form action="salvarpessoa" method="post" th:object="${pessoaObj}" class="col s12" id="formpessoa">
 			<div class="row">
 				<div class="input-field col s6">

@@ -1,10 +1,15 @@
 package curso.springboot.springboot.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,13 +43,30 @@ public class PessoaController {
 	}
 	
 	@PostMapping(value= "**/salvarpessoa")
-	public ModelAndView salvar(Pessoa pessoa) {
-		pessoaRepository.save(pessoa);
-		ModelAndView andView = new  ModelAndView("cadastro/cadastropessoa");
-		Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
-		andView.addObject("pessoas", pessoaIt);
-		andView.addObject("pessoaObj", new Pessoa());
-		return andView;
+	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) {
+		
+		if(bindingResult.hasErrors()) {
+			ModelAndView andView = new  ModelAndView("cadastro/cadastropessoa");
+			Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
+			andView.addObject("pessoas", pessoaIt);
+			andView.addObject("pessoaObj", pessoa);
+			
+			List<String> msg = new ArrayList<String>();
+			for(ObjectError objectError : bindingResult.getAllErrors()) {
+				//erro vem das anotações do modelo pessoa
+				msg.add(objectError.getDefaultMessage());
+			}
+			andView.addObject("msg", msg);			
+			return andView;
+		}
+		else {
+			pessoaRepository.save(pessoa);
+			ModelAndView andView = new  ModelAndView("cadastro/cadastropessoa");
+			Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
+			andView.addObject("pessoas", pessoaIt);
+			andView.addObject("pessoaObj", new Pessoa());
+			return andView;
+		}
 	}
 	
 	@GetMapping(value= "/listapessoas")
