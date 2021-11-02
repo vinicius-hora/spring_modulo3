@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import curso.springboot.springboot.service.ImplementacaoUserDetailsService;
@@ -42,6 +41,41 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 		
 	}
 	
+	@Override //ignora URL especificas
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/static/**");
+		web.ignoring().antMatchers("./materialize/**");
+		
+		web.ignoring().antMatchers("./resources/**");
+	}
+	
+	
+	
+
+	/*
+	 forumulario de login personalizado, obs: apresentando erro com o javascript e css
+	@Override //configura os acessos por http
+	protected void configure(HttpSecurity http) throws Exception {
+		
+		http.csrf()
+		.disable()//desativa as configurações padrões do spring
+		.authorizeRequests()// permite resgringir acessos
+		.antMatchers(HttpMethod.GET, "/").permitAll()// qualquer usuário acessa essa página 
+		.antMatchers("/static/**").permitAll()
+		.antMatchers(HttpMethod.GET, "/cadastropessoa").hasAnyRole("ADMIN")
+		.anyRequest().authenticated()
+		.and().formLogin().permitAll() // permite qualquer usuário
+		.loginPage("/login")
+		.defaultSuccessUrl("/cadastropessoa", true)
+		.failureUrl("/login?error=true")
+		 .and().logout()
+		.logoutSuccessUrl("/login") //mapeia URL de logout e nvalida usuário
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+		
+	}
+	*/
+	
+	
 	
 	/*
 	@Override //cria autenticação do usuário  em memória
@@ -52,10 +86,32 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 		.roles("ADMIN");
 	}
 	*/
-	
+	/*
 	@Override //ignora URL especificas
 	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("./materialize/**");
+		
+		web.ignoring().antMatchers("./resources/**");
+		
+		web.ignoring().mvcMatchers("**//**");
+		web.ignoring().mvcMatchers("**//**");
+		web.ignoring().mvcMatchers("/static/");
+		web.ignoring().mvcMatchers("/static/**");
+		web.ignoring().antMatchers("/");
+		web.ignoring().antMatchers("GET");
+		web.ignoring().antMatchers("/resources/**");
+		web.ignoring().antMatchers("**//**");
 		web.ignoring().antMatchers("/static/**");
+		web.ignoring().antMatchers("/static");
+
+		
+		
 	}
+	
+	*/
+	
 
 }
+
+
+

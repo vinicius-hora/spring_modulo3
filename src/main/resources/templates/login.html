@@ -7,6 +7,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	 <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css"  media="screen,projection"/>
 	 <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css"  media="screen,projection"/>
+	 <link rel="stylesheet" type="text/css" href="/css/efeito.css" media="screen" />
 	 <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
@@ -14,8 +15,26 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	</head>
 	<body>
-		<h1>Olá Spring Boot</h1>
-		<a href= "/cadastropessoa">Cadastro</a>
+		<h1>ACesso ao sistema</h1>
+		<form th:action="@{/login}" method="post" class="col s12">
+			<div class="row">
+				<div class="input-field col s6">
+					<label>Login</label>
+					<input type="text" name= "username">
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<label>Senha</label>
+					<input type="password" name= "password">
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input name="Logar" class="waves-effect waves-light btn" type="submit" value="Logar">
+				</div>
+			</div>
+		</form>
 		
 		<script type="text/javascript" src="materialize/js/materialize.js"></script>
 		<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
