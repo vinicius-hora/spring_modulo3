@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import curso.springboot.springboot.model.Pessoa;
 import curso.springboot.springboot.model.Telefone;
 import curso.springboot.springboot.repository.PessoaRepositoy;
 import curso.springboot.springboot.repository.TelefoneRepository;
+import curso.springboot.springboot.service.ReportUtil;
 
 
 
@@ -31,6 +34,9 @@ public class PessoaController {
 	
 	@Autowired
 	private TelefoneRepository telefoneRepository;
+	
+	@Autowired
+	private ReportUtil reportUtil;
 	
 	@GetMapping(value= "/cadastropessoa")
 	public ModelAndView inicio() {
@@ -120,6 +126,58 @@ public class PessoaController {
 		modelandView.addObject("pessoas", pessoas);
 		modelandView.addObject("pessoaObj",new Pessoa());
 		return modelandView;
+		
+	}
+	//get para imprimir/gerar relatório
+	@GetMapping(value= "**/pesquisarpessoa")
+	public void imprimePDF(@RequestParam("nomepesquisa") String nomepesquisa, 
+			@RequestParam("pesquisasexo") String pesquisasexo,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		
+		//busca por nome esexo
+		if (pesquisasexo != null && !pesquisasexo.isEmpty()
+				&& nomepesquisa != null && !nomepesquisa.isEmpty() ) {
+			
+			
+			pessoas = pessoaRepository.findPessoaByNameSexo(nomepesquisa, pesquisasexo);
+			
+		}
+		//busca por nome
+		else if(nomepesquisa != null && !nomepesquisa.isEmpty()) {
+			
+			pessoas = pessoaRepository.findPessoaByName(nomepesquisa);
+		}
+		//busca por sexo
+		else if(pesquisasexo != null && !pesquisasexo.isEmpty()) {
+			
+			pessoas = pessoaRepository.findPessoaBySexo(pesquisasexo);
+		}
+		else {//busca todos
+			Iterable<Pessoa> iterator = pessoaRepository.findAll();
+			for( Pessoa pessoa : iterator) {
+				pessoas.add(pessoa);
+			}
+		}
+		
+		//chamar o serviço que gera o relatório
+		byte[] pdf = reportUtil.gerarRelatorio(pessoas, "pessoa", request.getServletContext());
+		
+		//tamanho da resposta
+		response.setContentLength(pdf.length);
+		
+		//definir na resposta o tipo do arquivo
+		response.setContentType("application/octet-stream");
+		
+		//cabeçalho de resposta
+		String headerKey = "Content-Disposition";
+		String headerValue = String.format("attachment; filename=\"%s\"", "relatorio.pdf");
+		response.setHeader(headerKey, headerValue);
+		
+		//finalizar a resposta
+		response.getOutputStream().write(pdf);
+		
 		
 	}
 	
