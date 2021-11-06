@@ -15,20 +15,33 @@
     <!-- Adicionando Javascript -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
-<link type="text/css" rel="stylesheet"
-	href="/materialize/css/materialize.css" media="screen,projection" />
-<link type="text/css" rel="stylesheet"
-	href="/materialize/css/materialize.min.css" media="screen,projection" />
-<link rel="stylesheet" type="text/css" href="/css/efeito.css" media="screen" />
+
 <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- Adicionando css -->
+<style type="text/css">
+form input[type=submit]{
+	color:white;
+}
+table{
+	width: 100%;
+	
+
+}
+table td, table th{
+	border: 1px solid grey;
+}
+table th{
+	background: #eee
+}
+</style>
 </head>
 <body>
 	<h3>Spring Boot + Thymeleaf + marealize Design</h3>
-	
+	<a href= "../logout">Sair</a>
 	<fieldset>
 	<legend>Cadastro de pessoa</legend>
 	<div class="row">
@@ -154,7 +167,8 @@
 			<div class="row">
 				<div class="input-field col s6">
 					<input class="waves-effect waves-light btn" type="submit" value="Salvar">
-					<button class="waves-effect waves-light btn" type="reset" value="reset">Novo</button>
+					<button class="waves-effect waves-light btn" type="reset" value="reset"
+					onclick="document.getElementById('pesquisarpessoa').method = 'post'">Novo</button>
 					
 				</div>
 			</div>
@@ -171,7 +185,9 @@
 			<div class="row">
 				<div class="input-field col s6">
 					<label for="nomepesquisa" class="active">Pesquisa por nome: </label> 
-					<input name="nomepesquisa" id="nomepesquisa" class="vadidate">
+					<input name="nomepesquisa" id="nomepesquisa" class="vadidate"
+					th:value="${nomepesquisa}">
+					
 					</div>
 					<div class="input-field col s6">
 						<label for="pesquisasexo"  class="active">Pesquisa sexo</label>
@@ -205,27 +221,44 @@
 				<th>ID</th>
 				<th>Nome</th>
 				<th>Sobrenome</th>
-				<th>Idade</th>
+				<th>Curriculo</th>
 				<th>Editar</th>
 				<th>Excluir</th>
 			</tr> 
 		</thead>
-		<tr th:each="pessoa : ${pessoas}">
+		<tr th:each ="pessoa : ${pessoas}">
 			<td th:text="${pessoa.id}"></td>
 			<td > <a th:href="@{/telefones/{idpessoa}(idpessoa=${pessoa.id})}"><span th:text="${pessoa.nome}"></span> </a></td>
 			<td th:text="${pessoa.sobrenome}"></td>
-			<td th:text="${pessoa.idade}"></td>
-			<td><a
-				th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a>
+			<td><a th:if="${pessoa.Curriculo != null}"
+			th:href="@{/baixarcurriculo/{idpessoa}(idpessoa=${pessoa.id})}">Download</a>
+			<a th:if="${pessoa.Curriculo == null}" style="color: black;">Sem arquivo</a>
 			</td>
-			<td><a
-				th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">excluir</a>
+			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a>
+			</td>
+			<td><a th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">excluir</a>
 			</td>
 		</tr>
 	</table>
-	<script type="text/javascript" src="/materialize/js/materialize.js"></script>
-	<script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
-	<script type="text/javascript" language="javascript" src="./javascript/codigo.js"></script>
+	<div class="row" style="margin-top: 30px;">
+		<center>
+		<div th:if="${pessoas != null}">
+			<span th:if="${pessoas.hasPrevious()}">
+			<a th:href="@{/pessoaspag(page=${pessoas.number-1}, size=${pessoas.size}, nomepesquisa=${nomepesquisa})}">Anterior</a>
+			</span>
+			<th:block th:each="i: ${#numbers.sequence(0, pessoas.totalPages - 1)}">
+			<a th:href="@{/pessoaspag(page=${i}, size=${pessoas.size}, nomepesquisa=${nomepesquisa})}">[[
+			${i} + 1]]</a>
+			</th:block>
+			
+			<span th:if="${pessoas.hasNext()}">
+			<a th:href="@{/pessoaspag(page=${pessoas.number+1}, size=${pessoas.size}, nomepesquisa=${nomepesquisa})}">Próximo</a>
+			</span>
+		</div>
+		</center>
+	</div>
+	
+	
 	<!-- Adicionando Javascript -->
     <script>
 

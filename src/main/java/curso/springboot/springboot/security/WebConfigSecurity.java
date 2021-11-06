@@ -19,7 +19,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
-	
+	/*
 	@Override //configura os acessos por http
 	protected void configure(HttpSecurity http) throws Exception {
 		
@@ -34,6 +34,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 	}
 	
+	*/
 	@Override //cria autenticação do usuário com banco de dados
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(implementacaoUserDetailsService)
@@ -52,8 +53,8 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	
 	
 
-	/*
-	 forumulario de login personalizado, obs: apresentando erro com o javascript e css
+	
+	 //forumulario de login personalizado, obs: apresentando erro com o javascript e css
 	@Override //configura os acessos por http
 	protected void configure(HttpSecurity http) throws Exception {
 		
@@ -73,7 +74,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 		
 	}
-	*/
+	
 	
 	
 	
@@ -107,7 +108,6 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 		
 		
 	}
-	
 	*/
 	
 
